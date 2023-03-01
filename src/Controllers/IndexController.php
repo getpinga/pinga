@@ -10,14 +10,16 @@ class IndexController implements RequestHandlerInterface
 {
     public function handle(\Psr\Http\Message\ServerRequestInterface $request): ResponseInterface
     {
-        return new Response(
-            200,
-            [
-                'Content-Type'=>'application/json'
-            ],
-            json_encode([
-                'name' => 'Foo'
-            ])
-        );
+		$responseBody = json_encode(['name' => 'Foo']);
+		$contentLength = strlen($responseBody);
+
+		return new Response(
+			200,
+			[
+				'Content-Type' => 'application/json',
+				'Content-Length' => $contentLength,
+			],
+			$responseBody
+		);
     }
 }
