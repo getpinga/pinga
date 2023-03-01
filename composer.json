@@ -1,5 +1,5 @@
 {
-    "name": "getpinga/pinglet",
+    "name": "pinga/pinglet",
     "description": "Pinglet Framework is a PHP microframework that seamlessly integrates with Swoole or Swow, allowing for lightning-fast web applications",
     "type": "project",  
     "keywords": [
