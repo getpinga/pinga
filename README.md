@@ -10,5 +10,5 @@ Project is based on refortunato/SwooleApiHttpExample
 2. Use
 
 ```
-composer create-project --prefer-dist pinga/tembo my-api-skeleton
+composer create-project --prefer-dist pinga/pinglet my-api-skeleton
 ```
