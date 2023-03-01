@@ -49,7 +49,18 @@ while (true) {
                           ->withParsedBody($request->post ?? [])
                           ->withUploadedFiles($request->files ?? []);
                         $serverReponse = $router->execute($serverRequest);
-			$connection->respond($serverReponse->getBody(), $serverReponse->getStatusCode());
+                        $headers = $serverReponse->getHeaders();
+                        if ($serverReponse instanceof ResponsePlusInterface) {
+                            $headers = $serverReponse->getStandardHeaders();
+                        } else {
+                            $headers['Connection'] = $connection->shouldKeepAlive() ? 'keep-alive' : 'closed';
+                            if (!$serverReponse->hasHeader('Content-Length')) {
+                                $body = (string) $serverReponse->getBody();
+                                $headers['Content-Length'] = strlen($body);
+                            }
+                        }
+                        $serverReponse = Psr7::setHeaders($serverReponse, $headers);
+                        $connection->sendHttpResponse($serverReponse);
                     } catch (HttpProtocolException $exception) {
 			echo sprintf('Error: %s' . PHP_EOL, $exception->getMessage());
                         $connection->error($exception->getCode(), $exception->getMessage(), close: true);
