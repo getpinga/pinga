@@ -13,10 +13,16 @@ class CustomerController implements RequestHandlerInterface
     {
         echo PHP_EOL."ParsedBody: ".PHP_EOL;var_dump($request->getParsedBody());echo PHP_EOL;
         echo PHP_EOL."UploadedFiles: ".PHP_EOL;var_dump($request->getUploadedFiles());echo PHP_EOL;
-        return new Response(
-            status: 201,
-            headers: ['Content-type' => 'application/json'],
-            body: (string) $request->getBody()
-        );
+		$responseBody = (string) $request->getBody();
+		$contentLength = strlen($responseBody);
+
+		return new Response(
+			status: 201,
+			headers: [
+				'Content-Type' => 'application/json',
+				'Content-Length' => $contentLength
+			],
+			body: $responseBody
+		);
     }
 }
