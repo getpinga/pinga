@@ -7,8 +7,10 @@ Project is based on refortunato/SwooleApiHttpExample
 
 1. Install Swoole or Swow extensions.
 
-2. Use
+2. Install app using
 
 ```
 composer create-project --prefer-dist pinga/pinglet my-api
 ```
+
+3. Edit **start-swoole-http.php** or **start-swow-http.php** and add your IP, hostname and port.
