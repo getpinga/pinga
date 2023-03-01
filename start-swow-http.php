@@ -38,8 +38,8 @@ while (true) {
                 while (true) {
                     $request = null;
                     try {
-						            $request = $connection->recvHttpRequest();
-					              $serverRequest = (new ServerRequest(
+			$request = $connection->recvHttpRequest();
+			$serverRequest = (new ServerRequest(
                             method: $request->getMethod(),
                             uri: $request->getUri(),
                             headers: $request->getStandardHeaders(),
@@ -49,9 +49,9 @@ while (true) {
                           ->withParsedBody($request->post ?? [])
                           ->withUploadedFiles($request->files ?? []);
                         $serverReponse = $router->execute($serverRequest);
-						            $connection->respond($serverReponse->getBody(), $serverReponse->getStatusCode());
+			$connection->respond($serverReponse->getBody(), $serverReponse->getStatusCode());
                     } catch (HttpProtocolException $exception) {
-						            echo sprintf('Error: %s' . PHP_EOL, $exception->getMessage());
+			echo sprintf('Error: %s' . PHP_EOL, $exception->getMessage());
                         $connection->error($exception->getCode(), $exception->getMessage(), close: true);
                         break;
                     }
@@ -59,7 +59,7 @@ while (true) {
                         break;
                     }
                 }
-            } catch (Exception) {
+            } catch (Exception $exception) {
                 echo sprintf('Error: %s' . PHP_EOL, $exception->getMessage());
             } finally {
                 $connection->close();
