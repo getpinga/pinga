@@ -11,6 +11,7 @@ use Swow\Psr7\Psr7;
 use Swow\Psr7\Server\Server as HttpServer;
 use Swow\Socket;
 use Swow\SocketException;
+use App\PiLogger;
 use App\Routes\Router;
 use Nyholm\Psr7\ServerRequest;
 
@@ -24,7 +25,15 @@ $port = 8081;
 $server = new \Swow\Psr7\Server\Server();
 $server->bind($host, $port)->listen(Socket::DEFAULT_BACKLOG);
 
-echo sprintf('Swow http server is started at http://%s:%s' . PHP_EOL, $hostname, $port);
+// Choose one
+// Log to a file
+//$logger = new PiLogger('/tmp/file.log');
+// Log to stdout
+$logger = new PiLogger(null, true);
+// Log to both file and stdout
+//$logger = new PiLogger($logFilePath, true);
+
+$logger->info(sprintf('Pinglet Swow running at http://%s:%s', $hostname, $port));
 
 $router = new Router();
 $router->setRouteCollector($routeCollection);
@@ -33,12 +42,20 @@ while (true) {
     try {
         $connection = null;
         $connection = $server->acceptConnection();
-        Coroutine::run(static function () use ($connection, $router): void {
+        Coroutine::run(static function () use ($connection, $router, $logger): void {
             try {
                 while (true) {
                     $request = null;
                     try {
 			$request = $connection->recvHttpRequest();
+			$request_method = $request->getMethod();
+			$request_uri = $request->getUri();
+			$_SERVER['REQUEST_URI'] = $request_uri;
+			$_SERVER['REQUEST_METHOD'] = $request_method;
+			$_SERVER['REMOTE_ADDR'] = $request->getServerParams()['remote_addr'];
+			$_GET = $request->get ?? [];
+			$_FILES = $request->files ?? [];
+	
 			$serverRequest = (new ServerRequest(
                             method: $request->getMethod(),
                             uri: $request->getUri(),
@@ -62,7 +79,7 @@ while (true) {
                         $serverReponse = Psr7::setHeaders($serverReponse, $headers);
                         $connection->sendHttpResponse($serverReponse);
                     } catch (HttpProtocolException $exception) {
-			echo sprintf('Error: %s' . PHP_EOL, $exception->getMessage());
+						$logger->error($exception->getMessage());
                         $connection->error($exception->getCode(), $exception->getMessage(), close: true);
                         break;
                     }
@@ -71,7 +88,7 @@ while (true) {
                     }
                 }
             } catch (Exception $exception) {
-                echo sprintf('Error: %s' . PHP_EOL, $exception->getMessage());
+				$logger->error($exception->getMessage());
             } finally {
                 $connection->close();
             }
