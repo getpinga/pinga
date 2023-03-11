@@ -6,9 +6,9 @@ use Nyholm\Psr7\Response;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
-class IndexController implements RequestHandlerInterface
+class IndexController
 {
-    public function handle(\Psr\Http\Message\ServerRequestInterface $request): ResponseInterface
+    public function index(\Psr\Http\Message\ServerRequestInterface $request): ResponseInterface
     {
 		$responseBody = json_encode(['name' => 'Foo']);
 		$contentLength = strlen($responseBody);
