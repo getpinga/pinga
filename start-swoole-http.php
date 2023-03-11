@@ -55,6 +55,12 @@ $server->on("Request", function (
     $_SERVER["REMOTE_ADDR"] = $request->server["remote_addr"];
     $_GET = $request->get ?? [];
     $_FILES = $request->files ?? [];
+    if ($request_method === 'POST' && $request->header['content-type'] === 'application/json') {
+        $body = $request->rawContent();
+        $_POST = empty($body) ? [] : json_decode($body);
+    } else {
+        $_POST = $request->post ?? [];
+    }
 
     $serverRequest = (new ServerRequest(
         method: $request->getMethod(),
