@@ -8,7 +8,7 @@ use Psr\Http\Message\ServerRequestInterface;
 
 $dispatcher = FastRoute\simpleDispatcher(function (RouteCollector $r) {
     $r->get('/test', [IndexController::class, 'index']);
-    $r->get('/test', [CustomerController::class, 'index']);
+    $r->post('/test', [CustomerController::class, 'index']);
     $r->get('/test/{id}', function (ServerRequestInterface $request, array $args) {
         return new Response(
             status: 201,
