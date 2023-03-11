@@ -2,6 +2,7 @@
 declare(strict_types=1);
 ini_set('memory_limit', '1G');
 
+use App\PiLogger;
 use App\Routes\Router;
 use Nyholm\Psr7\ServerRequest;
 
@@ -16,36 +17,41 @@ $server = new Swoole\HTTP\Server($host , $port);
 
 $server->set([
     'worker_num' => 4,      // The number of worker processes to start
-    'task_worker_num' => 4,  // The amount of task workers to start
     'backlog' => 128,       // TCP backlog connection number
     'input_buffer_size' => 32 * 1024*1024, //Configure the memory size of the server receive input buffer. Default value is 2M. Value in bytes (in this example: 32MB).
     'buffer_output_size' => 32 * 1024*1024, //Set the output memory buffer server send size. The default value is 2M. Value in bytes (in this example: 32MB).
 ]);
 
+// Choose one
+// Log errors to a file
+//$logger = new PiLogger('/tmp/file.log');
+// Log errors to stdout
+$logger = new PiLogger(null, true);
+// Log errors to both file and stdout
+//$logger = new PiLogger($logFilePath, true);
+
 $router = new Router();
 $router->setRouteCollector($routeCollection);
 
-// Triggered when new worker processes starts
-$server->on("WorkerStart", function($server, $workerId)
+$server->on("WorkerStart", function($server, $workerId) use ($logger)
 {
-    echo PHP_EOL."New worker started: {$workerId}".PHP_EOL;
+	$logger->info("New worker started: {$workerId}");
 });
 
-$server->on('Task', function (Swoole\Server $server, $task_id, $reactorId, $data)
-{
-    echo "Task Worker Process received data";
-    echo "#{$server->worker_id}\tonTask: [PID={$server->worker_pid}]: task_id=$task_id, data_len=" . strlen($data) . "." . PHP_EOL;
-    $server->finish($data);
+$server->on('start', function (Swoole\HTTP\Server $server) use ($hostname, $port, $logger) {
+	$logger->info(sprintf('Pinglet Swoole running at http://%s:%s', $hostname, $port));
 });
 
-// Triggered when the HTTP Server starts, connections are accepted after this callback is executed
-$server->on('start', function (Swoole\HTTP\Server $server) use ($hostname, $port) {
-    echo sprintf('Swoole http server is started at http://%s:%s' . PHP_EOL, $hostname, $port);
-});
-
-// The main HTTP server request callback event, entry point for all incoming HTTP requests
-$server->on('Request', function(Swoole\HTTP\Request $request, Swoole\HTTP\Response $response) use ($router)
+$server->on('Request', function(Swoole\HTTP\Request $request, Swoole\HTTP\Response $response) use ($router, $logger)
 {
+    $request_method = $request->server['request_method'];
+    $request_uri = $request->server['request_uri'];
+    $_SERVER['REQUEST_URI'] = $request_uri;
+    $_SERVER['REQUEST_METHOD'] = $request_method;
+    $_SERVER['REMOTE_ADDR'] = $request->server['remote_addr'];
+    $_GET = $request->get ?? [];
+    $_FILES = $request->files ?? [];
+	
     $serverRequest = (new ServerRequest(
         method: $request->getMethod(),
         uri: $request->server['request_uri'],
@@ -70,16 +76,14 @@ $server->on('Request', function(Swoole\HTTP\Request $request, Swoole\HTTP\Respon
     $response->end((string) $serverReponse->getBody());
 });
 
-// Triggered when the server is shutting down
-$server->on("Shutdown", function($server, $workerId)
+$server->on("Shutdown", function($server, $workerId) use ($logger)
 {
-    echo PHP_EOL."Server is shutdown: {$workerId}".PHP_EOL;
+	$logger->info("Server is shutdown: {$workerId}");
 });
 
-// Triggered when worker processes are being stopped
-$server->on("WorkerStop", function($server, $workerId)
+$server->on("WorkerStop", function($server, $workerId) use ($logger)
 {
-    echo PHP_EOL."Worker stoped: {$workerId}".PHP_EOL;
+	$logger->info("Worker stoped: {$workerId}");
 });
 
 $server->start();
