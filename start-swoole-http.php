@@ -23,11 +23,11 @@ $server->set([
 ]);
 
 // Choose one
-// Log errors to a file
+// Log to a file
 //$logger = new PiLogger('/tmp/file.log');
-// Log errors to stdout
+// Log to stdout
 $logger = new PiLogger(null, true);
-// Log errors to both file and stdout
+// Log to both file and stdout
 //$logger = new PiLogger($logFilePath, true);
 
 $router = new Router();
