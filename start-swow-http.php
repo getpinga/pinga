@@ -60,6 +60,12 @@ while (true) {
                         ];
                         $_GET = $request->get ?? [];
                         $_FILES = $request->files ?? [];
+                        if ($request_method === 'POST' && $request->getHeaderLine('content-type') === 'application/json') {
+                            $body = $request->getBody();
+                            $_POST = empty($body) ? [] : json_decode($body);
+                        } else {
+                            $_POST = $request->getBody();
+                        }
 
                         $serverRequest = (new ServerRequest(
                             method: $request->getMethod(),
