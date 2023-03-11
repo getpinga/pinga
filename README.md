@@ -14,3 +14,19 @@ composer create-project --prefer-dist pinga/pinglet myapi
 ```
 
 3. Edit **start-swoole-http.php** or **start-swow-http.php** and add your IP, hostname and port. Start by running the chosen file.
+
+## TODO
+
+- Caching.
+
+- Databases.
+
+- .env files support.
+
+- PHP-DI and Respect/Validation support.
+
+- Sessions and cookies.
+
+- Monitoring tools.
+
+- Comments, documentation, security tests.
