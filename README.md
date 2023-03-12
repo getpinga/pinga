@@ -15,11 +15,15 @@ composer create-project --prefer-dist pinga/pinglet myapi
 
 3. Edit **start-swoole-http.php** or **start-swow-http.php** and add your IP, hostname and port. Start by running the chosen file.
 
+## Components
+
+- Logging: use the PiLogger class.
+
+- [Database for Swoole](https://github.com/getpinga/pinglet-db-swoole), for Swow use regular PDO.
+
 ## TODO
 
 - Caching.
-
-- Databases.
 
 - .env files support.
 
