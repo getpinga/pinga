@@ -86,8 +86,10 @@ while (true) {
                         switch ($routeInfo[0]) {
                             case Dispatcher::NOT_FOUND:
                                 $connection->error(HttpStatus::NOT_FOUND);
+                                break;
                             case Dispatcher::METHOD_NOT_ALLOWED:
-                                $connection->error(HttpStatus::METHOD_NOT_ALLOWED);
+                                $connection->error(HttpStatus::NOT_ALLOWED);
+                                break;
                             case Dispatcher::FOUND:
                                 $handler = $routeInfo[1];
                                 $vars = $routeInfo[2];
