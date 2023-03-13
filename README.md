@@ -17,7 +17,7 @@ composer create-project --prefer-dist pinga/pinglet myapi
 
 - Logging: use the PiLogger class.
 
-- Database: [Swoole](https://github.com/getpinga/pinglet-db-swoole), [Swow](https://github.com/getpinga/db).
+- Database: [Pinga\Db](https://github.com/getpinga/db). For the Swoole version, you can also use [Pinglet\Db](https://github.com/getpinga/pinglet-db-swoole).
 
 ## TODO
 
