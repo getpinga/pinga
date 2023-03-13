@@ -19,7 +19,7 @@ composer create-project --prefer-dist pinga/pinglet myapi
 
 - Logging: use the PiLogger class.
 
-- [Database for Swoole](https://github.com/getpinga/pinglet-db-swoole), for Swow use regular PDO.
+- Database: [Swoole](https://github.com/getpinga/pinglet-db-swoole), [Swow](https://github.com/getpinga/db).
 
 ## TODO
 
