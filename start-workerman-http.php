@@ -100,7 +100,7 @@ $worker->onMessage = function ($connection, Request $request) use (
             }
 
             $response->withStatus($serverResponse->getStatusCode());
-            $response->withBody($serverResponse->getBody());
+            $response->withBody((string) $serverResponse->getBody());
             break;
     }
 
