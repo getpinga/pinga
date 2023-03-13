@@ -30,9 +30,10 @@
         "psr/log": "^3.0"
     },
     "suggest": {
-        "ext-swow": "You need either ext-swoole or ext-openswoole or ext-swow",
         "ext-swoole": "You need either ext-swoole or ext-openswoole or ext-swow",
-        "ext-openswoole": "You need either ext-swoole or ext-openswoole or ext-swow"
+        "ext-openswoole": "You need either ext-swoole or ext-openswoole or ext-swow",
+        "ext-swow": "You need either ext-swoole or ext-openswoole or ext-swow",
+        "workerman/workerman": "Workerman is an alternative to Swoole for building high-performance PHP applications"
     },
     "config": {
         "preferred-install": {
