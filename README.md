@@ -21,14 +21,14 @@ composer create-project --prefer-dist pinga/pinglet myapi
 
 - Caching: [Pinga\Cache](https://github.com/getpinga/cache).
 
+- Templates: [Twig](https://github.com/twigphp/Twig) or [Plates](https://github.com/thephpleague/plates). Just install one of the two and follow the examples.
+
 ## TODO
 
-- .env files support.
-
-- PHP-DI and Respect/Validation support.
+- .env files support and respect/validation support.
 
 - Sessions and cookies.
 
-- Monitoring tools.
+- Status monitoring tool.
 
 - Comments, documentation, security tests.
