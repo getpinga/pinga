@@ -31,4 +31,8 @@ composer create-project --prefer-dist pinga/pinglet myapi
 
 ## TODO
 
+- Static files.
+
+- File uploading.
+
 - Comments, security tests.
