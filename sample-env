@@ -1,0 +1,3 @@
+HOST=0.0.0.0
+HOSTNAME=my.host.com
+PORT=8080
