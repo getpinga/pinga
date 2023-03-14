@@ -11,7 +11,7 @@ A lightweight and high-performance PHP microframework that harnesses the power o
 composer create-project --prefer-dist pinga/pinglet myapi
 ```
 
-3. Edit **start-swoole-http.php**, **start-swow-http.php** or **start-workerman-http.php** and add your IP, hostname and port. Start by running the chosen file.
+3. Edit **sample-env** and add your IP, hostname and port, rename it to **.env** and run one of the **start-swoole-http.php**, **start-swow-http.php** or **start-workerman-http.php**, depending on your choice.
 
 ## Components
 
