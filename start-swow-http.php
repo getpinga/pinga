@@ -17,7 +17,7 @@ use Nyholm\Psr7\ServerRequest;
 use Dotenv\Dotenv;
 
 require_once __DIR__ . "/vendor/autoload.php";
-$routeCollection = require __DIR__ . "/config/routes.php";
+$app['route'] = require __DIR__ . "/config/routes.php";
 
 // Load environment variables from .env file
 $dotenv = Dotenv::createImmutable(__DIR__);
@@ -31,15 +31,9 @@ $server = new \Swow\Psr7\Server\Server();
 $server->bind($host, $port)->listen(Socket::DEFAULT_BACKLOG);
 file_put_contents($_ENV['PIDFILE'], getmypid());
 
-// Choose one
-// Log to a file
-//$logger = new PiLogger('/tmp/file.log');
-// Log to stdout
-$logger = new PiLogger(null, true);
-// Log to both file and stdout
-//$logger = new PiLogger($logFilePath, true);
+$app['logger'] = new PiLogger(null, true);
 
-$logger->info(
+$app['logger']->info(
     sprintf("Pinglet Swow running at http://%s:%s", $hostname, $port)
 );
 
@@ -49,8 +43,7 @@ while (true) {
         $connection = $server->acceptConnection();
         Coroutine::run(static function () use (
             $connection,
-            $routeCollection,
-            $logger
+            $app
         ): void {
             try {
                 while (true) {
@@ -84,7 +77,7 @@ while (true) {
                             ->withParsedBody($request->post ?? [])
                             ->withUploadedFiles($request->files ?? []);
 
-                        $routeInfo = $routeCollection->dispatch(
+                        $routeInfo = $app['route']->dispatch(
                             $request_method,
                             $request_uri
                         );
@@ -108,13 +101,13 @@ while (true) {
                                         "@",
                                         $handler
                                     );
-                                    $controller = new $controllerClass();
+                                    $controller = new $controllerClass($app);
                                     $serverReponse = $controller->$method(
                                         $serverRequest
                                     );
                                 } elseif (is_array($handler)) {
                                     [$controllerClass, $method] = $handler;
-                                    $controller = new $controllerClass();
+                                    $controller = new $controllerClass($app);
                                     $serverReponse = $controller->$method(
                                         $serverRequest
                                     );
@@ -153,7 +146,7 @@ while (true) {
                                 break;
                         }
                     } catch (HttpProtocolException $exception) {
-                        $logger->error($exception->getMessage());
+                        $app['logger']->error($exception->getMessage());
                         $connection->error(
                             $exception->getCode(),
                             $exception->getMessage(),
@@ -166,7 +159,7 @@ while (true) {
                     }
                 }
             } catch (Exception $exception) {
-                $logger->error($exception->getMessage());
+                $app['logger']->error($exception->getMessage());
             } finally {
                 $connection->close();
             }
