@@ -31,7 +31,7 @@ $server->set([
 $app['logger'] = new PiLogger(null, true);
 
 $server->on("WorkerStart", function ($server, $workerId) use ($app) {
-    $app['logger'] = new PiLogger(null, true);->info("New worker started: {$workerId}");
+    $app['logger']->info("New worker started: {$workerId}");
 });
 
 $server->on("start", function (Swoole\HTTP\Server $server) use (
@@ -39,7 +39,7 @@ $server->on("start", function (Swoole\HTTP\Server $server) use (
     $port,
     $app
 ) {
-    $app['logger'] = new PiLogger(null, true);->info(
+    $app['logger']->info(
         sprintf("Pinglet Swoole running at http://%s:%s", $hostname, $port)
     );
 });
@@ -118,11 +118,11 @@ $server->on("Request", function (
 });
 
 $server->on("Shutdown", function ($server, $workerId) use ($app) {
-    $app['logger'] = new PiLogger(null, true);->info("Server is shutdown: {$workerId}");
+    $app['logger']->info("Server is shutdown: {$workerId}");
 });
 
 $server->on("WorkerStop", function ($server, $workerId) use ($app) {
-    $app['logger'] = new PiLogger(null, true);->info("Worker stoped: {$workerId}");
+    $app['logger']->info("Worker stoped: {$workerId}");
 });
 
 $server->start();
