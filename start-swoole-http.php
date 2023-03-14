@@ -5,13 +5,18 @@ ini_set("memory_limit", "1G");
 use App\PiLogger;
 use FastRoute\Dispatcher;
 use Nyholm\Psr7\ServerRequest;
+use Dotenv\Dotenv;
 
 require_once __DIR__ . "/vendor/autoload.php";
 $routeCollection = require __DIR__ . "/config/routes.php";
 
-$host = "0.0.0.0";
-$hostname = "my.host.com";
-$port = 8080;
+// Load environment variables from .env file
+$dotenv = Dotenv::createImmutable(__DIR__);
+$dotenv->load();
+
+$host = $_ENV['HOST'];
+$hostname = $_ENV['HOSTNAME'];
+$port = intval($_ENV['PORT']);
 
 $server = new Swoole\HTTP\Server($host, $port);
 
