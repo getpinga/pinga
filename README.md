@@ -23,9 +23,11 @@ composer create-project --prefer-dist pinga/pinglet myapi
 
 - Templates: [Twig](https://github.com/twigphp/Twig) or [Plates](https://github.com/thephpleague/plates). Just install one of the two and follow the examples.
 
+- Support for .env files: required settings will be changed from .env file.
+
 ## TODO
 
-- .env files support and respect/validation support.
+- respect/validation support.
 
 - Sessions and cookies.
 
