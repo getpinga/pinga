@@ -8,7 +8,7 @@ use Nyholm\Psr7\ServerRequest;
 use Dotenv\Dotenv;
 
 require_once __DIR__ . "/vendor/autoload.php";
-$routeCollection = require __DIR__ . "/config/routes.php";
+$app['route'] = require __DIR__ . "/config/routes.php";
 
 // Load environment variables from .env file
 $dotenv = Dotenv::createImmutable(__DIR__);
@@ -28,24 +28,18 @@ $server->set([
     "pid_file" => $_ENV['PIDFILE']
 ]);
 
-// Choose one
-// Log to a file
-//$logger = new PiLogger('/tmp/file.log');
-// Log to stdout
-$logger = new PiLogger(null, true);
-// Log to both file and stdout
-//$logger = new PiLogger($logFilePath, true);
+$app['logger'] = new PiLogger(null, true);
 
-$server->on("WorkerStart", function ($server, $workerId) use ($logger) {
-    $logger->info("New worker started: {$workerId}");
+$server->on("WorkerStart", function ($server, $workerId) use ($app) {
+    $app['logger'] = new PiLogger(null, true);->info("New worker started: {$workerId}");
 });
 
 $server->on("start", function (Swoole\HTTP\Server $server) use (
     $hostname,
     $port,
-    $logger
+    $app
 ) {
-    $logger->info(
+    $app['logger'] = new PiLogger(null, true);->info(
         sprintf("Pinglet Swoole running at http://%s:%s", $hostname, $port)
     );
 });
@@ -53,7 +47,7 @@ $server->on("start", function (Swoole\HTTP\Server $server) use (
 $server->on("Request", function (
     Swoole\HTTP\Request $request,
     Swoole\HTTP\Response $response
-) use ($routeCollection, $logger) {
+) use ($app) {
     $request_method = $request->server["request_method"];
     $request_uri = $request->server["request_uri"];
     $_SERVER["REQUEST_URI"] = $request_uri;
@@ -79,7 +73,7 @@ $server->on("Request", function (
         ->withParsedBody($request->post ?? [])
         ->withUploadedFiles($request->files ?? []);
 
-    $routeInfo = $routeCollection->dispatch($request_method, $request_uri);
+    $routeInfo = $app['route']->dispatch($request_method, $request_uri);
 
     switch ($routeInfo[0]) {
         case Dispatcher::NOT_FOUND:
@@ -98,11 +92,11 @@ $server->on("Request", function (
 
             if (is_string($handler)) {
                 [$controllerClass, $method] = explode("@", $handler);
-                $controller = new $controllerClass();
+                $controller = new $controllerClass($app);
                 $serverReponse = $controller->$method($serverRequest);
             } elseif (is_array($handler)) {
                 [$controllerClass, $method] = $handler;
-                $controller = new $controllerClass();
+                $controller = new $controllerClass($app);
                 $serverReponse = $controller->$method($serverRequest);
             } else {
                 $serverReponse = $handler($serverRequest);
@@ -123,12 +117,12 @@ $server->on("Request", function (
     }
 });
 
-$server->on("Shutdown", function ($server, $workerId) use ($logger) {
-    $logger->info("Server is shutdown: {$workerId}");
+$server->on("Shutdown", function ($server, $workerId) use ($app) {
+    $app['logger'] = new PiLogger(null, true);->info("Server is shutdown: {$workerId}");
 });
 
-$server->on("WorkerStop", function ($server, $workerId) use ($logger) {
-    $logger->info("Worker stoped: {$workerId}");
+$server->on("WorkerStop", function ($server, $workerId) use ($app) {
+    $app['logger'] = new PiLogger(null, true);->info("Worker stoped: {$workerId}");
 });
 
 $server->start();
