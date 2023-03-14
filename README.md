@@ -27,8 +27,8 @@ composer create-project --prefer-dist pinga/pinglet myapi
 
 - [Sessions](https://github.com/getpinga/pinglet/blob/main/docs/Sessions.md).
 
+- [Cookies](https://github.com/getpinga/pinglet/blob/main/docs/Cookies.md).
+
 ## TODO
 
-- Cookies.
-
-- Comments, documentation, security tests.
+- Comments, security tests.
