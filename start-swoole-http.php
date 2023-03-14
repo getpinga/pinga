@@ -25,7 +25,7 @@ $server->set([
     "backlog" => 128, // TCP backlog connection number
     "input_buffer_size" => 32 * 1024 * 1024, //Configure the memory size of the server receive input buffer. Default value is 2M. Value in bytes (in this example: 32MB).
     "buffer_output_size" => 32 * 1024 * 1024, //Set the output memory buffer server send size. The default value is 2M. Value in bytes (in this example: 32MB).
-    "pid_file" => 'run.pid'
+    "pid_file" => $_ENV['PIDFILE']
 ]);
 
 // Choose one
