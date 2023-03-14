@@ -15,7 +15,7 @@ composer create-project --prefer-dist pinga/pinglet myapi
 
 ## Components
 
-- Logging: use the PiLogger class.
+- [Logging](https://github.com/getpinga/pinglet/blob/main/docs/Logger.md).
 
 - Database: [Pinga\Db](https://github.com/getpinga/db). For the Swoole version, you can also use [Pinglet\Db](https://github.com/getpinga/pinglet-db-swoole).
 
@@ -25,8 +25,10 @@ composer create-project --prefer-dist pinga/pinglet myapi
 
 - Support for .env files: required settings will be changed from .env file.
 
+- [Sessions](https://github.com/getpinga/pinglet/blob/main/docs/Sessions.md).
+
 ## TODO
 
-- Sessions and cookies.
+- Cookies.
 
 - Comments, documentation, security tests.
