@@ -5,12 +5,28 @@
 ```
 use App\PiSession;
 
-$session = new PiSession();
-$session->start();
+$app['session'] = new PiSession();
+$app['session']->start();
+```
 
+## Add in your controller
+
+```
+use App\PiSession;
+
+private $session;
+
+public function __construct($app) {
+    $this->session = $app['session'];
+}
+```
+
+then
+
+```
 // set a session variable
-$session->set('username', 'johndoe');
+$this->session->set('username', 'johndoe');
 
 // get a session variable
-$username = $session->get('username');
+$username = $this->session->get('username');
 ```
