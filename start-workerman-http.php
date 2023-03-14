@@ -11,7 +11,7 @@ use Workerman\Worker;
 use Dotenv\Dotenv;
 
 require_once __DIR__ . "/vendor/autoload.php";
-$routeCollection = require __DIR__ . "/config/routes.php";
+$app['route'] = require __DIR__ . "/config/routes.php";
 
 // Load environment variables from .env file
 $dotenv = Dotenv::createImmutable(__DIR__);
@@ -26,18 +26,17 @@ $worker->count = 4;
 $worker::$eventLoopClass = \Workerman\Events\Swoole::class;
 
 $worker->onWorkerStart = function ($worker) use (
-   $host, $port
+   $host, $port, $app
 ) {
 	if ($worker->id === 0) {
-    $logger = new PiLogger(null, true);
-    $logger->info("Pinglet Workerman running at http://{$host}:{$port}");
+    $app['logger'] = new PiLogger(null, true);
+    $app['logger']->info("Pinglet Workerman running at http://{$host}:{$port}");
 	}
 };
 
 $worker->onMessage = function ($connection, Request $request) use (
-    $routeCollection, $hostname, $port
+    $app, $hostname, $port
 ) {
-    global $logger;
     $request_method = $request->method();
     $request_uri = $request->uri();
     $_SERVER["REQUEST_URI"] = $request_uri;
@@ -66,7 +65,7 @@ $worker->onMessage = function ($connection, Request $request) use (
         ->withParsedBody($_POST)
         ->withUploadedFiles($_FILES);
 
-    $routeInfo = $routeCollection->dispatch($request_method, $request_uri);
+    $routeInfo = $app['route']->dispatch($request_method, $request_uri);
 
     $response = new Response();
 
@@ -85,11 +84,11 @@ $worker->onMessage = function ($connection, Request $request) use (
 
             if (is_string($handler)) {
                 [$controllerClass, $method] = explode("@", $handler);
-                $controller = new $controllerClass();
+                $controller = new $controllerClass($app);
                 $serverResponse = $controller->$method($serverRequest);
             } elseif (is_array($handler)) {
                 [$controllerClass, $method] = $handler;
-                $controller = new $controllerClass();
+                $controller = new $controllerClass($app);
                 $serverResponse = $controller->$method($serverRequest);
             } else {
                 $serverResponse = $handler($serverRequest);
