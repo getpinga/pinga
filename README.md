@@ -27,10 +27,6 @@ composer create-project --prefer-dist pinga/pinglet myapi
 
 ## TODO
 
-- respect/validation support.
-
 - Sessions and cookies.
-
-- Status monitoring tool.
 
 - Comments, documentation, security tests.
