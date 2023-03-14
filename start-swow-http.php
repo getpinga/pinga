@@ -29,6 +29,7 @@ $port = intval($_ENV['PORT']);
 
 $server = new \Swow\Psr7\Server\Server();
 $server->bind($host, $port)->listen(Socket::DEFAULT_BACKLOG);
+file_put_contents($_ENV['PIDFILE'], getmypid());
 
 // Choose one
 // Log to a file
