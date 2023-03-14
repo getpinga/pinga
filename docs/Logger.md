@@ -1,6 +1,6 @@
 # Logger
 
-Choose the options you would like and replace ```$app['logger'] = new PiLogger(null, true);``` with one of those:
+Choose the options you would like and replace ```php $app['logger'] = new PiLogger(null, true);``` with one of those:
 
 ## Log to a file
 
