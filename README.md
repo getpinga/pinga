@@ -225,6 +225,12 @@ class IndexController
 }
 ```
 
+## Static File Loader
+
+The Static File Loader is a utility class that allows your application to serve static files, such as CSS, JavaScript, images, or other assets, from the **/public** directory. It is designed to work seamlessly with Swoole, Swow, and Workerman frameworks, ensuring non-blocking and efficient serving of static content. When a request is received for a static file, the **PiStaticFileHandler** class will handle it and return an appropriate response. If the file is not found, the request will continue to be processed by your application's other route handlers.
+
+Note: Make sure your static files are placed in the **/public** directory, as this is the default location that the **PiStaticFileHandler** class will look for files.
+
 ## Contributing
 
 We welcome contributions to improve and extend Pinglet. Please follow these steps to contribute:
