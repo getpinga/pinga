@@ -3,9 +3,20 @@ Pinglet is a high-performance, non-blocking, event-driven PHP framework built on
 
 # Table of Contents
 - [Requirements](#requirements)
-- [Section 2](#section-2)
-  - [Subsection 2.1](#subsection-21)
-  - [Subsection 2.2](#subsection-22)
+- [Components](#components)
+- [Installation](#installation)
+- [Configuration](#configuration)
+- [Basic Usage](#basic-usage)
+- [Routing](#routing)
+- [Controllers](#controllers)
+- [Templating](#templating)
+- [Logging](#logging)
+- [Sessions](#sessions)
+- [Cookies](#cookies)
+- [Static File Loader](#static-file-loader)
+- [File Upload](#file-upload)
+- [Contributing](#contributing)
+- [License](#license)
 
 ## Requirements
 
