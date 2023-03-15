@@ -1,6 +1,12 @@
 # Pinglet
 Pinglet is a high-performance, non-blocking, event-driven PHP framework built on top of the Swoole, Swow, and Workerman frameworks. It provides a simple yet powerful way to create HTTP APIs and web applications with support for route handling, environment configuration, logging, templating, and custom session management. The framework can be easily extended and customized to fit any project's needs, making it a versatile solution for creating scalable, efficient, and feature-rich APIs and web applications. Based on the wonderful [refortunato/SwooleApiHttpExample](https://github.com/refortunato/SwooleApiHttpExample).
 
+# Table of Contents
+- [Requirements](#requirements)
+- [Section 2](#section-2)
+  - [Subsection 2.1](#subsection-21)
+  - [Subsection 2.2](#subsection-22)
+
 ## Requirements
 
 * PHP 8.1 or higher
