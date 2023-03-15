@@ -68,6 +68,8 @@ $worker->onMessage = function ($connection, Request $request) use (
         ->withParsedBody($_POST)
         ->withUploadedFiles($_FILES);
 	
+    $response = new Response();
+	
     $staticResponse = $app['staticFileHandler']->handleRequest($serverRequest);
     if ($staticResponse !== null) {
         foreach ($staticResponse->getHeaders() as $header => $values) {
@@ -85,8 +87,6 @@ $worker->onMessage = function ($connection, Request $request) use (
     }
 
     $routeInfo = $app['route']->dispatch($request_method, $request_uri);
-
-    $response = new Response();
 
     switch ($routeInfo[0]) {
         case Dispatcher::NOT_FOUND:
