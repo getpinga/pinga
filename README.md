@@ -223,6 +223,30 @@ The Static File Loader is a utility class that allows your application to serve 
 
 Note: Make sure your static files are placed in the **/public** directory, as this is the default location that the **PiStaticFileHandler** class will look for files.
 
+## File Upload
+
+In this section, we will cover how to handle file uploads using the provided controller with Swoole, Swow, and Workerman servers. The example assumes you have already set up the server request object correctly, as demonstrated in previous topics. Then you use the following code in your controller that will process uploaded files:
+
+```php
+// Get the uploaded files from the request
+$uploadedFiles = $request->getUploadedFiles();
+
+// Process the uploaded files
+foreach ($uploadedFiles as $uploadedFile) {
+// Check if the file is uploaded without any errors
+   if ($uploadedFile->getError() === UPLOAD_ERR_OK) {
+        // Get the file information
+        $filename = $uploadedFile->getClientFilename();
+        $fileSize = $uploadedFile->getSize();
+        $fileType = $uploadedFile->getClientMediaType();
+
+        // Process the uploaded file, e.g., save it to a specific directory
+        $targetPath = '/path/to/save/' . $filename;
+        $uploadedFile->moveTo($targetPath);
+    }
+}
+```
+
 ## Contributing
 
 We welcome contributions to improve and extend Pinglet. Please follow these steps to contribute:
