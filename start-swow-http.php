@@ -77,7 +77,8 @@ while (true) {
                         ))
                             ->withQueryParams($request->getQueryParams() ?? [])
                             ->withParsedBody($request->post ?? [])
-                            ->withUploadedFiles($request->files ?? []);
+                            ->withUploadedFiles($request->files ?? [])
+                            ->withCookieParams($request->getCookieParams() ?? []);
                         
                         $staticResponse = $app['staticFileHandler']->handleRequest($serverRequest);
                         if ($staticResponse !== null) {
