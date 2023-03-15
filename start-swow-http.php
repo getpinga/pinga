@@ -12,6 +12,7 @@ use Swow\Psr7\Server\Server as HttpServer;
 use Swow\Socket;
 use Swow\SocketException;
 use App\PiLogger;
+use App\PiStaticFileHandler;
 use FastRoute\Dispatcher;
 use Nyholm\Psr7\ServerRequest;
 use Dotenv\Dotenv;
@@ -32,6 +33,7 @@ $server->bind($host, $port)->listen(Socket::DEFAULT_BACKLOG);
 file_put_contents($_ENV['PIDFILE'], getmypid());
 
 $app['logger'] = new PiLogger(null, true);
+$app['staticFileHandler'] = new PiStaticFileHandler(__DIR__ . '/public');
 
 $app['logger']->info(
     sprintf("Pinglet Swow running at http://%s:%s", $hostname, $port)
@@ -76,6 +78,18 @@ while (true) {
                             ->withQueryParams($request->getQueryParams() ?? [])
                             ->withParsedBody($request->post ?? [])
                             ->withUploadedFiles($request->files ?? []);
+                        
+                        $staticResponse = $app['staticFileHandler']->handleRequest($serverRequest);
+                        if ($staticResponse !== null) {
+                            $headers = $staticResponse->getHeaders();
+                            if (!$staticResponse->hasHeader("Content-Length")) {
+                                $body = (string) $staticResponse->getBody();
+                                $headers["Content-Length"] = strlen($body);
+                            }
+                            $staticResponse = Psr7::setHeaders($staticResponse, $headers);
+                            $connection->sendHttpResponse($staticResponse);
+                            break;
+                        }
 
                         $routeInfo = $app['route']->dispatch(
                             $request_method,
