@@ -240,9 +240,3 @@ We welcome contributions to improve and extend Pinglet. Please follow these step
 ## License
 
 Pinglet is released under the [MIT License](https://opensource.org/licenses/MIT). See the **LICENSE** file for more information.
-
-## TODO
-
-- File uploading.
-
-- Security tests.
