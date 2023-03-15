@@ -24,10 +24,10 @@ class PiStaticFileHandler
         if (file_exists($file) && is_file($file)) {
             $mimeType = mime_content_type($file);
 			
-            if ($mimeType === 'text/plain' && pathinfo($filePath, PATHINFO_EXTENSION) === 'css') {
+            if ($mimeType === 'text/plain' && pathinfo($file, PATHINFO_EXTENSION) === 'css') {
                 $mimeType = 'text/css';
             }
-            if ($mimeType === 'text/plain' && pathinfo($filePath, PATHINFO_EXTENSION) === 'js') {
+            if ($mimeType === 'text/plain' && pathinfo($file, PATHINFO_EXTENSION) === 'js') {
                 $mimeType = 'text/javascript';
             }
 	
