@@ -9,7 +9,7 @@ Pinglet is a high-performance, non-blocking, event-driven PHP framework built on
 
 ## Components
 
-- [Logging](https://github.com/getpinga/pinglet/blob/main/docs/Logger.md).
+- Logging.
 
 - Database: [Pinga\Db](https://github.com/getpinga/db). For the Swoole version, you can also use [Pinglet\Db](https://github.com/getpinga/pinglet-db-swoole).
 
@@ -21,7 +21,7 @@ Pinglet is a high-performance, non-blocking, event-driven PHP framework built on
 
 - Sessions.
 
-- [Cookies](https://github.com/getpinga/pinglet/blob/main/docs/Cookies.md).
+- Cookies.
 
 ## Installation
 
