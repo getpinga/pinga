@@ -73,7 +73,8 @@ $server->on("Request", function (
     ))
         ->withQueryParams($request->get ?? [])
         ->withParsedBody($request->post ?? [])
-        ->withUploadedFiles($request->files ?? []);
+        ->withUploadedFiles($request->files ?? [])
+        ->withCookieParams($request->cookie ?? []);
     
 	$staticResponse = $app['staticFileHandler']->handleRequest($serverRequest);
 	if ($staticResponse !== null) {
