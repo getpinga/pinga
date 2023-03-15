@@ -3,6 +3,7 @@ declare(strict_types=1);
 ini_set("memory_limit", "1G");
 
 use App\PiLogger;
+use App\PiStaticFileHandler;
 use FastRoute\Dispatcher;
 use Nyholm\Psr7\ServerRequest;
 use Dotenv\Dotenv;
@@ -29,6 +30,7 @@ $server->set([
 ]);
 
 $app['logger'] = new PiLogger(null, true);
+$app['staticFileHandler'] = new PiStaticFileHandler(__DIR__ . '/public');
 
 $server->on("WorkerStart", function ($server, $workerId) use ($app) {
     $app['logger']->info("New worker started: {$workerId}");
@@ -72,6 +74,18 @@ $server->on("Request", function (
         ->withQueryParams($request->get ?? [])
         ->withParsedBody($request->post ?? [])
         ->withUploadedFiles($request->files ?? []);
+    
+	$staticResponse = $app['staticFileHandler']->handleRequest($serverRequest);
+	if ($staticResponse !== null) {
+		foreach ($staticResponse->getHeaders() as $header => $values) {
+			foreach ($values as $value) {
+				$response->header($header, $value);
+			}
+		}
+		$response->status($staticResponse->getStatusCode());
+		$response->end((string) $staticResponse->getBody());
+		return;
+	}
 
     $routeInfo = $app['route']->dispatch($request_method, $request_uri);
 
