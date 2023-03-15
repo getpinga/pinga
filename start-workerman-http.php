@@ -3,6 +3,7 @@ declare(strict_types=1);
 ini_set("memory_limit", "1G");
 
 use App\PiLogger;
+use App\PiStaticFileHandler;
 use FastRoute\Dispatcher;
 use Nyholm\Psr7\ServerRequest;
 use Workerman\Protocols\Http\Request;
@@ -24,6 +25,8 @@ $port = intval($_ENV['PORT']);
 $worker = new Worker("http://{$host}:{$port}");
 $worker->count = 4;
 $worker::$eventLoopClass = \Workerman\Events\Swoole::class;
+
+$app['staticFileHandler'] = new PiStaticFileHandler(__DIR__ . '/public');
 
 $worker->onWorkerStart = function ($worker) use (
    $host, $port, $app
@@ -64,6 +67,22 @@ $worker->onMessage = function ($connection, Request $request) use (
         ->withQueryParams($_GET)
         ->withParsedBody($_POST)
         ->withUploadedFiles($_FILES);
+	
+    $staticResponse = $app['staticFileHandler']->handleRequest($serverRequest);
+    if ($staticResponse !== null) {
+        foreach ($staticResponse->getHeaders() as $header => $values) {
+            if (strtolower($header) === "location") {
+                $response->withHeader("Location", $values[0]);
+            }
+            foreach ($values as $value) {
+                $response->withHeader($header, $value);
+            }
+        }
+        $response->withStatus($staticResponse->getStatusCode());
+        $response->withBody((string) $staticResponse->getBody());
+        $connection->send($response);
+        return;
+    }
 
     $routeInfo = $app['route']->dispatch($request_method, $request_uri);
 
