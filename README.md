@@ -128,11 +128,16 @@ $app['logger'] = new PiLogger($logFilePath, true);
  $app['logger']->info("Log details");
  ```
 
-The following log levels are available:
+All log levels are available:
 
-* error
-* info
 * debug
+* info
+* notice
+* warning
+* error
+* critical
+* alert
+* emergency
 
 ## Sessions
 
