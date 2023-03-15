@@ -164,65 +164,57 @@ Note: Ensure that the **/cache** directory exists and has the proper permissions
 
 ## Cookies
 
-Modify your controllers the following way to get access to cookies:
+Cookies are a convenient way to store small amounts of data on the client-side, which can be useful for maintaining session state, tracking user preferences, and more. This guide will show you how to work with cookies in your controllers using the **PiCookie** class which provides two methods for working with cookies: **setCookie** and **getCookie**. You can use these methods in your controllers to set and get cookies easily.
+
+### Set a Cookie
+
+To set a cookie in a controller, use the **setCookie** method of the **PiCookie** class. This method takes the following parameters:
+
+1. **$response**: The response object that you want to add the cookie to.
+2. **$name**: The name of the cookie.
+3. **$value**: The value of the cookie.
+4. **$expire** (optional): The number of seconds until the cookie expires. The default value is **3600** seconds (1 hour).
+5. **$path** (optional): The path on the server where the cookie will be available. The default value is **/**.
+6. **$domain** (optional): The domain that the cookie is available to. The default value is an **empty** string.
+7. **$secure** (optional): Whether the cookie should be transmitted only over a secure HTTPS connection. The default value is **false**.
+8. **$httpOnly** (optional): Whether the cookie should be accessible only through the HTTP protocol. The default value is **true**.
+
+Here's an example of how to use the setCookie method in a controller:
+
+In the beginning of your controller method place:
 
 ```php
+$cookie = new PiCookie();
+```
 
-<?php
+Right before **$return** place:
 
-namespace App\Controllers;
+```php
+$response = $cookie->setCookie($response, 'cookie_name', 'cookie_value');
+```
 
-use Nyholm\Psr7\Response;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
+### Get a Cookie
 
-class IndexController
-{
-    public function index(ServerRequestInterface $request): ResponseInterface
-    {
-        // Get cookie value
-        $cookies = $request->getCookieParams();
-        $cookieValue = isset($cookies['cookie_name']) ? $cookies['cookie_name'] : 'default_value';
+To get the value of a cookie in a controller, use the **getCookie** method of the **PiCookie** class. This method takes the following parameters:
 
-        // Your response body
-        $responseBody = json_encode(['name' => 'Foo', 'cookieValue' => $cookieValue]);
-        $contentLength = strlen($responseBody);
+1. **$request**: The request object that contains the cookies.
+2. **$name**: The name of the cookie.
+3. **$default** (optional): The default value to return if the cookie is not found. The default value is **null**.
 
-        // Create a new Response object
-        $response = new Response(
-            200,
-            [
-                'Content-Type' => 'application/json',
-                'Content-Length' => $contentLength,
-                'Date' => gmdate('D, d M Y H:i:s').' GMT',
-                'Server' => 'Pinglet',
-                'Cache-Control' => 'max-age=3600',
-                'Access-Control-Allow-Origin' => '*'
-            ],
-            $responseBody
-        );
+Here's an example of how to use the getCookie method in a controller:
 
-        // Set a cookie (conditionally)
-        if (/* your condition */) {
-            $response = $this->setCookie($response, 'cookie_name', 'cookie_value');
-        }
+In the beginning of your controller method place:
 
-        return $response;
-    }
+```php
+$cookie = new PiCookie();
+```
 
-    private function setCookie(ResponseInterface $response, string $name, string $value, int $expire = 3600, string $path = '/'): ResponseInterface
-    {
-        $cookieHeader = sprintf(
-            '%s=%s; Expires=%s; Path=%s',
-            $name,
-            $value,
-            gmdate('D, d M Y H:i:s T', time() + $expire),
-            $path
-        );
+Change your response like:
 
-        return $response->withAddedHeader('Set-Cookie', $cookieHeader);
-    }
-}
+```php
+$cookieValue = $cookie->getCookie($request, 'cookie_name', 'default_value');
+$responseBody = json_encode(['name' => 'Foo', 'cookieValue' => $cookieValue]);
+$contentLength = strlen($responseBody);
 ```
 
 ## Static File Loader
