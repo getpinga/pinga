@@ -66,7 +66,8 @@ $worker->onMessage = function ($connection, Request $request) use (
     ))
         ->withQueryParams($_GET)
         ->withParsedBody($_POST)
-        ->withUploadedFiles($_FILES);
+        ->withUploadedFiles($_FILES)
+        ->withCookieParams($request->cookie() ?? []);
 	
     $response = new Response();
 	
