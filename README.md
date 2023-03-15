@@ -15,11 +15,11 @@ Pinglet is a high-performance, non-blocking, event-driven PHP framework built on
 
 - Caching: [Pinga\Cache](https://github.com/getpinga/cache).
 
-- [Templates](https://github.com/getpinga/pinglet/blob/main/docs/Templates.md): [Twig](https://github.com/twigphp/Twig) or [Plates](https://github.com/thephpleague/plates). Just install one of the two and follow the examples.
+- Templates: [Twig](https://github.com/twigphp/Twig) or [Plates](https://github.com/thephpleague/plates).
 
 - Support for .env files: required settings will be changed from .env file.
 
-- [Sessions](https://github.com/getpinga/pinglet/blob/main/docs/Sessions.md).
+- Sessions.
 
 - [Cookies](https://github.com/getpinga/pinglet/blob/main/docs/Cookies.md).
 
@@ -85,21 +85,35 @@ To render a Plates template, use **PlatesController.php** in a controller method
 
 ## Logging
 
-Pinglet API includes a basic logging class, **PiLogger**, that can be customized to fit your needs. To use the logger, create a new instance and call the appropriate log level method:
+Pinglet API includes a basic logging class, **PiLogger**, that can be customized to fit your needs. To use the logger, choose the option you would like and replace ```$app['logger'] = new PiLogger(null, true);``` with one of those:
+
+### Log to a file
 
 ```php
-$logger = new PiLogger(null, true);
-$logger->info('Log message');
+$app['logger'] = new PiLogger('/tmp/file.log');
 ```
+
+### Log to stdout
+
+```php
+$app['logger'] = new PiLogger(null, true);
+```
+
+### Log to both file and stdout
+
+```php
+$app['logger'] = new PiLogger($logFilePath, true);
+```
+
+### Log action
+
+```php
+ $app['logger']->info("Log details");
+ ```
 
 The following log levels are available:
 
-* emergency
-* alert
-* critical
 * error
-* warning
-* notice
 * info
 * debug
 
@@ -109,37 +123,107 @@ Pinglet API provides a custom session handling class, **PiSession**, that levera
 
 Here's how to use the **PiSession** class in your project:
 
-1. Include the **PiSession** class in your controller:
+1. Add in the beginning of your start-xxx-http.php file:
+
+```php
+use App\PiSession;
+
+$app['session'] = new PiSession();
+$app['session']->start();
+```
+
+2. Include the **PiSession** class in your controller:
 
 ```php
 use App\PiSession;
 ```
 
-2. Create a new instance of **PiSession**:
+3. Add in the beginning of your controller:
 
 ```php
-$session = new PiSession();
-```
+private $session;
 
-3. Start a new session or resume an existing one:
-
-```php
-$session->start();
+public function __construct($app) {
+    $this->session = $app['session'];
+}
 ```
 
 4. Set a session value:
 
 ```php
-$session->set('key', 'value');
+$this->session->set('key', 'value');
 ```
 
 5. Get a session value:
 
 ```php
-$value = $session->get('key', 'default_value');
+$value = $this->session->get('key', 'default_value');
 ```
 
 Note: Ensure that the **/cache** directory exists and has the proper permissions to allow the session handler to read and write session data.
+
+## Cookies
+
+Modify your controllers the following way to get access to cookies:
+
+```php
+
+<?php
+
+namespace App\Controllers;
+
+use Nyholm\Psr7\Response;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+
+class IndexController
+{
+    public function index(ServerRequestInterface $request): ResponseInterface
+    {
+        // Get cookie value
+        $cookies = $request->getCookieParams();
+        $cookieValue = isset($cookies['cookie_name']) ? $cookies['cookie_name'] : 'default_value';
+
+        // Your response body
+        $responseBody = json_encode(['name' => 'Foo', 'cookieValue' => $cookieValue]);
+        $contentLength = strlen($responseBody);
+
+        // Create a new Response object
+        $response = new Response(
+            200,
+            [
+                'Content-Type' => 'application/json',
+                'Content-Length' => $contentLength,
+                'Date' => gmdate('D, d M Y H:i:s').' GMT',
+                'Server' => 'Pinglet',
+                'Cache-Control' => 'max-age=3600',
+                'Access-Control-Allow-Origin' => '*'
+            ],
+            $responseBody
+        );
+
+        // Set a cookie (conditionally)
+        if (/* your condition */) {
+            $response = $this->setCookie($response, 'cookie_name', 'cookie_value');
+        }
+
+        return $response;
+    }
+
+    private function setCookie(ResponseInterface $response, string $name, string $value, int $expire = 3600, string $path = '/'): ResponseInterface
+    {
+        $cookieHeader = sprintf(
+            '%s=%s; Expires=%s; Path=%s',
+            $name,
+            $value,
+            gmdate('D, d M Y H:i:s T', time() + $expire),
+            $path
+        );
+
+        return $response->withAddedHeader('Set-Cookie', $cookieHeader);
+    }
+}
+```
 
 ## Contributing
 
