@@ -28,10 +28,10 @@ class PiLogger {
         }
 
         if (count($handlers) === 1) {
-            $this->logger = new Logger('PINGLET', $handlers);
+            $this->logger = new Logger('PINGA', $handlers);
         } else {
             $groupHandler = new GroupHandler($handlers);
-            $this->logger = new Logger('PINGLET', [$groupHandler]);
+            $this->logger = new Logger('PINGA', [$groupHandler]);
         }
     }
 
