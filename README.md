@@ -47,7 +47,7 @@ Pinga is a high-performance, non-blocking, event-driven PHP framework built on t
 2. Create your application:
 
 ```bash
-composer create-project --prefer-dist pinga/pinglet myapi
+composer create-project --prefer-dist pinga/pinga myapp
 ```
 
 3. Copy the **sample-env** file to create a new **.env** file:
