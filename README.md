@@ -1,5 +1,5 @@
-# Pinglet
-Pinglet is a high-performance, non-blocking, event-driven PHP framework built on top of the Swoole, Swow, and Workerman frameworks. It provides a simple yet powerful way to create HTTP APIs and web applications with support for route handling, environment configuration, logging, templating, and custom session management. The framework can be easily extended and customized to fit any project's needs, making it a versatile solution for creating scalable, efficient, and feature-rich APIs and web applications. Based on the wonderful [refortunato/SwooleApiHttpExample](https://github.com/refortunato/SwooleApiHttpExample).
+# Pinga
+Pinga is a high-performance, non-blocking, event-driven PHP framework built on top of the Swoole, Swow, and Workerman frameworks. It provides a simple yet powerful way to create HTTP APIs and web applications with support for route handling, environment configuration, logging, templating, and custom session management. The framework can be easily extended and customized to fit any project's needs, making it a versatile solution for creating scalable, efficient, and feature-rich APIs and web applications. Based on the wonderful [refortunato/SwooleApiHttpExample](https://github.com/refortunato/SwooleApiHttpExample).
 
 # Table of Contents
 - [Requirements](#requirements)
@@ -94,7 +94,7 @@ Use the **IndexController.php** as template to create a new controller.
 
 ## Templating
 
-Pinglet API supports both Twig and Plates for templating.
+Pinga API supports both Twig and Plates for templating.
 
 To render a Twig template, use **TwigController.php** in a controller method.
 
@@ -102,7 +102,7 @@ To render a Plates template, use **PlatesController.php** in a controller method
 
 ## Logging
 
-Pinglet API includes a basic logging class, **PiLogger**, that can be customized to fit your needs. To use the logger, choose the option you would like and replace ```$app['logger'] = new PiLogger(null, true);``` with one of those:
+Pinga API includes a basic logging class, **PiLogger**, that can be customized to fit your needs. To use the logger, choose the option you would like and replace ```$app['logger'] = new PiLogger(null, true);``` with one of those:
 
 ### Log to a file
 
@@ -141,7 +141,7 @@ All log levels are available:
 
 ## Sessions
 
-Pinglet API provides a custom session handling class, **PiSession**, that leverages the Pinga\Cache library for storing session data. This class ensures non-blocking session handling to maintain the performance benefits of Swoole, Swow, or Workerman.
+Pinga API provides a custom session handling class, **PiSession**, that leverages the Pinga\Cache library for storing session data. This class ensures non-blocking session handling to maintain the performance benefits of Swoole, Swow, or Workerman.
 
 Here's how to use the **PiSession** class in your project:
 
@@ -271,7 +271,7 @@ foreach ($uploadedFiles as $uploadedFile) {
 
 ## Contributing
 
-We welcome contributions to improve and extend Pinglet. Please follow these steps to contribute:
+We welcome contributions to improve and extend Pinga. Please follow these steps to contribute:
 
 1. Fork the repository.
 
@@ -285,4 +285,4 @@ We welcome contributions to improve and extend Pinglet. Please follow these step
 
 ## License
 
-Pinglet is released under the [MIT License](https://opensource.org/licenses/MIT). See the **LICENSE** file for more information.
+Pinga is released under the [MIT License](https://opensource.org/licenses/MIT). See the **LICENSE** file for more information.
