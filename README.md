@@ -84,7 +84,9 @@ php start-swow-http.php
 php start-workerman-http.php
 ```
 
-For Swoole version, you can also use ```run.sh```. Access the API in your browser or via a REST client using the configured **HOSTNAME** and **PORT**.
+For Swoole version, you can also use ```run.sh```.
+
+Access the API in your browser or via a REST client using the configured **HOSTNAME** and **PORT**.
 
 ## Routing
 
