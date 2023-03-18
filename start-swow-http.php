@@ -36,7 +36,7 @@ $app['logger'] = new PiLogger(null, true);
 $app['staticFileHandler'] = new PiStaticFileHandler(__DIR__ . '/public');
 
 $app['logger']->info(
-    sprintf("Pinglet Swow running at http://%s:%s", $hostname, $port)
+    sprintf("Pinga Swow running at http://%s:%s", $hostname, $port)
 );
 
 while (true) {
