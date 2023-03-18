@@ -33,7 +33,7 @@ $worker->onWorkerStart = function ($worker) use (
 ) {
 	if ($worker->id === 0) {
     $app['logger'] = new PiLogger(null, true);
-    $app['logger']->info("Pinglet Workerman running at http://{$host}:{$port}");
+    $app['logger']->info("Pinga Workerman running at http://{$host}:{$port}");
 	}
 };
 
