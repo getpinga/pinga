@@ -1,6 +1,6 @@
 {
-    "name": "pinga/pinglet",
-    "description": "Pinglet Framework is a PHP microframework that seamlessly integrates with Swoole or Swow, allowing for lightning-fast web applications",
+    "name": "pinga/pinga",
+    "description": "Pinga Framework is a PHP microframework that seamlessly integrates with Swoole, Swow or Workerman, allowing for lightning-fast web applications",
     "type": "project",  
     "keywords": [
         "microframework", "swoole", "swow", "async", "project template"
