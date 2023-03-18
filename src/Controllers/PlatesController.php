@@ -29,7 +29,7 @@ class PlatesController
                 'Content-Type' => 'text/html',
                 'Content-Length' => $contentLength,
                 'Date' => gmdate('D, d M Y H:i:s').' GMT',
-                'Server' => 'Pinglet',
+                'Server' => 'Pinga',
                 'Cache-Control' => 'max-age=3600',
                 'Access-Control-Allow-Origin' => '*'
             ],
