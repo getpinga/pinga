@@ -42,7 +42,7 @@ $server->on("start", function (Swoole\HTTP\Server $server) use (
     $app
 ) {
     $app['logger']->info(
-        sprintf("Pinglet Swoole running at http://%s:%s", $hostname, $port)
+        sprintf("Pinga Swoole running at http://%s:%s", $hostname, $port)
     );
 });
 
