@@ -17,7 +17,7 @@ class IndexController
 	return new Response(
 		200,
 		[
-			'Content-Type' => 'text/plain',
+			'Content-Type' => 'application/json',
 			'Content-Length' => $contentLength,
 			'Date' => gmdate('D, d M Y H:i:s').' GMT',
 			'Server' => 'Pinga',
