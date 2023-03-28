@@ -7,7 +7,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
-class CustomerController
+class UserController
 {
     public function index(ServerRequestInterface $request): ResponseInterface
     {
@@ -27,6 +27,26 @@ class CustomerController
 				'Access-Control-Allow-Origin' => '*'
 			],
 			body: $responseBody
+		);
+    }
+	
+	
+    public function getUser(ServerRequestInterface $request, array $args): ResponseInterface
+    {
+		$responseBody = json_encode(['user' => $args['id']]);
+		$contentLength = strlen($responseBody);
+
+		return new Response(
+			200,
+			[
+				'Content-Type' => 'application/json',
+				'Content-Length' => $contentLength,
+				'Date' => gmdate('D, d M Y H:i:s').' GMT',
+				'Server' => 'Pinga',
+				'Cache-Control' => 'max-age=3600',
+				'Access-Control-Allow-Origin' => '*'
+			],
+			$responseBody
 		);
     }
 }
