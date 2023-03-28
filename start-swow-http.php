@@ -118,13 +118,13 @@ while (true) {
                                     );
                                     $controller = new $controllerClass($app);
                                     $serverReponse = $controller->$method(
-                                        $serverRequest
+                                        $serverRequest, $vars
                                     );
                                 } elseif (is_array($handler)) {
                                     [$controllerClass, $method] = $handler;
                                     $controller = new $controllerClass($app);
                                     $serverReponse = $controller->$method(
-                                        $serverRequest
+                                        $serverRequest, $vars
                                     );
                                 } else {
                                     $serverReponse = $handler($serverRequest);
