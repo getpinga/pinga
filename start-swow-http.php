@@ -175,6 +175,7 @@ while (true) {
                 }
             } catch (Exception $exception) {
                 $app['logger']->error($exception->getMessage());
+                $connection->close();
             } finally {
                 $connection->close();
             }
@@ -189,6 +190,7 @@ while (true) {
         ) {
             sleep(1);
         } else {
+            $app['logger']->error($exception->getMessage());
             break;
         }
     }
