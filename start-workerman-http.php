@@ -105,11 +105,11 @@ $worker->onMessage = function ($connection, Request $request) use (
             if (is_string($handler)) {
                 [$controllerClass, $method] = explode("@", $handler);
                 $controller = new $controllerClass($app);
-                $serverResponse = $controller->$method($serverRequest);
+                $serverResponse = $controller->$method($serverRequest, $vars);
             } elseif (is_array($handler)) {
                 [$controllerClass, $method] = $handler;
                 $controller = new $controllerClass($app);
-                $serverResponse = $controller->$method($serverRequest);
+                $serverResponse = $controller->$method($serverRequest, $vars);
             } else {
                 $serverResponse = $handler($serverRequest);
             }
