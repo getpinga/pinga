@@ -108,11 +108,11 @@ $server->on("Request", function (
             if (is_string($handler)) {
                 [$controllerClass, $method] = explode("@", $handler);
                 $controller = new $controllerClass($app);
-                $serverReponse = $controller->$method($serverRequest);
+                $serverReponse = $controller->$method($serverRequest, $vars);
             } elseif (is_array($handler)) {
                 [$controllerClass, $method] = $handler;
                 $controller = new $controllerClass($app);
-                $serverReponse = $controller->$method($serverRequest);
+                $serverReponse = $controller->$method($serverRequest, $vars);
             } else {
                 $serverReponse = $handler($serverRequest);
             }
