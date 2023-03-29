@@ -37,7 +37,7 @@ Pinga is a high-performance, non-blocking, event-driven PHP framework built on t
 
 - Logging.
 
-- Database: [Pinga\Db](https://github.com/getpinga/db). For the Swoole version, you can also use [Pinglet\Db](https://github.com/getpinga/pinglet-db-swoole).
+- Database: [Pinga\Db](https://github.com/getpinga/db). For the Swoole version, use [Pinga/db-swoole](https://github.com/getpinga/db-swoole) or [Pinga/db-pool]https://github.com/getpinga/db-pool).
 
 - Caching: [Pinga\Cache](https://github.com/getpinga/cache).
 
